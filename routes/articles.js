@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Article = require('../models/Article').Article;
+const Article = require('../models/Article');
 
 router.get('/', (req, res, next) => {
   if (req.query.id) {
@@ -8,21 +8,49 @@ router.get('/', (req, res, next) => {
     return;
   }
   Article.all((err, data) => {
-    if (err) res.send(err);
+    if (err) {
+      next(err);
+      return;
+    }
     res.send(data);
-  })
+  });
 });
 
 router.get('/', (req, res, next) => {
-  // req.query.id
-  res.send('One Article');
+  if (req.query.id) {
+    Article.find(req.query.id, (err, data) => {
+      if (err) {
+        next(err);
+        return;
+      }
+      res.send(data || { data: null });
+    });
+  }
 });
 
 router.post('/', (req, res, next) => {
-  if (req.query.id) {
-    console.log('req.body.title', req.body.title);
-  }
-  res.send('Post Ok');
+  Article.create(req.body, (err, data) => {
+    if (err) {
+      next(err);
+      return;
+    }
+    res.send('Ok');
+  });
 });
+
+router.delete('/', (req, res, next) => {
+  if (req.query.id) {
+    Article.delete(req.query.id, (err, data) => {
+      if (err) {
+        next(err);
+        return;
+      }
+      res.send('Success');
+    });
+  }
+});
+
+
+
 
 module.exports = router;

@@ -1,15 +1,4 @@
-const sqlite3 = require('sqlite3').verbose();
-
-const dbName = 'later.sqlite';
-
-const db = new sqlite3.Database(dbName);
-db.serialize(() => {
-  const sql = `
-    CREATE TABLE IF NOT EXISTS articles
-    (id integer primary key, title, content, TEXT)
-  `;
-  db.run(sql);
-});
+const db = require('./db');
 
 class Article {
   static all(cb) {
@@ -19,6 +8,7 @@ class Article {
     db.get('SELECT * FROM articles WHERE id = ?', id, cb);
   }
   static create(data, cb) {
+    if (!data.title || !data.content) return cb(new Error('Please provide a title and content'));
     const sql = 'INSERT INTO articles(title, content) VALUES (?, ?)';
     db.run(sql, data.title, data.content, cb);
   }
@@ -28,5 +18,4 @@ class Article {
   }
 }
 
-module.exports = db;
-module.exports.Article = Article;
+module.exports = Article;
