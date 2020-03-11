@@ -3,12 +3,14 @@ const router = express.Router();
 
 router.get('/', (req, res, next) => {
   if (req.query.id) {
-    next()
+    next();
+    return;
   }
   res.send('all articles')
 });
 
 router.get('/', (req, res, next) => {
+  // req.query.id
   res.send('One Article')
 })
 
