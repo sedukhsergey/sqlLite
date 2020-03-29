@@ -10,17 +10,17 @@ db.serialize(() => {
   `;
 
   const usersSql = `
-  CREATE TABLE IF NOT EXISTS users
-  (id integer primary key, name, city)
+    CREATE TABLE IF NOT EXISTS users
+    (id integer primary key, name, city)
 `;
-
   const tracksSql = `
-   CREATE TABLE IF NOT EXIST tracks
-   (id integer, primary key, name, albumId, composer, milliseconds)
-`;
+    CREATE TABLE IF NOT EXISTS users
+    (id integer primary key, name, composer, milliseconds)
+  `;
 
   db.run(sql);
   db.run(usersSql);
+  db.run(tracksSql);
 });
 
 module.exports = db;
