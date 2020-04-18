@@ -2,16 +2,21 @@ const db = require('./db');
 
 class Tracks {
   static all(cb) {
-    db.all('SELECT * FROM tracks', cb);
+    db.run('SELECT * FROM tracks', cb)
   }
+
+  static create(data, cb) {
+    const sql = 'INSERT INTO tracks(composer, milliseconds) VALUES(?, ?)';
+    db.run(sql, data.name, data.city, cb);
+  }
+
   static find(id, cb) {
-    db.get('SELECT * FROM tracks WHERE id = ?', id, cb);
+    db.get('SELECT * FROM tracks WHERE id = ?', id, cb)
   }
-  static create({ albumId, composer, milliseconds }, cb) {
-    if ( !albumId || !composer || !milliseconds) {
-      return cb(new Error('Please provide all params'))
-    }
-    const sql = 'INSERT INTO tracks(albumId, composer, milliseconds)'
+
+  static delete(id, cb) {
+    if (!id) return cb(new Error('Please provide an id'));
+    db.run('DELETE FROM tracks WHERE id = ?', id, cb);
   }
 }
 
